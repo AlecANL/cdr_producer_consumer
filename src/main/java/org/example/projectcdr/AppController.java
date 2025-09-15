@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.nio.file.Files;
 
 public class AppController {
 
@@ -18,6 +19,20 @@ public class AppController {
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             System.out.println("Archivo cargado: " + selectedFile.getAbsolutePath());
+            this.readFile(selectedFile);
+        }
+    }
+
+    private void readFile(File file) {
+        try {
+            String content = new String(Files.readAllBytes(file.toPath()));
+            String[] lines = content.split("\n");
+
+            for (String line : lines) {
+                System.out.println("LINEA >>>> " + line);
+            }
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error al leer archivo: " + file.getName());
         }
     }
 }

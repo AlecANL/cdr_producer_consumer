@@ -6,13 +6,6 @@ public class CDRRegister {
     private String timestamp;
     private String duration;
 
-    public CDRRegister(String accountNumber, String phone, String timestamp, String duration) {
-        this.accountNumber = accountNumber;
-        this.phone = phone;
-        this.timestamp = timestamp;
-        this.duration = duration;
-    }
-
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
