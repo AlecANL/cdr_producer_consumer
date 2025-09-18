@@ -2,46 +2,36 @@ package org.example.projectcdr;
 
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Productor implements Runnable {
-    private final String[] cdrInFileListContent;
-    private final Buffer buffer;
+    private final SharedFileReader sharedFileReader;
+    private final LineQueue queue;
 
-    public Productor(Buffer buffer, String[] cdrInFileListContent) {
-        this.cdrInFileListContent = cdrInFileListContent;
-        this.buffer = buffer;
+    private final AtomicLong sequence;
+
+    public Productor(SharedFileReader sharedFileReader, LineQueue queue, AtomicLong sequence) {
+        this.sharedFileReader = sharedFileReader;
+        this.queue = queue;
+        this.sequence = sequence;
     }
 
     @Override
     public void run() {
+        String me = Thread.currentThread().getName();
+
         try {
             while (true) {
-                // TODO: maybe should create a count class, to manage access to cdr array
-                int position = 0;
+                String line = this.sharedFileReader.readLine();
+                if (line == null) break;
 
-                if (position == this.cdrInFileListContent.length) break;
-                CDRRegister register =  this.createRegisterCDR(this.cdrInFileListContent[position]);
-                this.buffer.put(register);
-                Thread.sleep(100);
+                long sequence = this.sequence.incrementAndGet();
+                this.queue.put(new LineItem(sequence, line, me, false));
+                System.out.println(line);
             }
         } catch (Exception e) {
-
+            System.out.printf("[%s] Error productor: %s%n", me, e.getMessage());
+            Thread.currentThread().interrupt();
         }
-    }
-
-    private CDRRegister createRegisterCDR(String register) {
-        String[] fields = register.split(",");
-        String accountNumber = fields[0];
-        String phone = fields[1];
-        String timestamp = fields[2];
-        String duration = fields[3];
-
-        CDRRegister cdrRegister = new CDRRegister();
-        cdrRegister.setAccountNumber(accountNumber);
-        cdrRegister.setPhone(phone);
-        cdrRegister.setTimestamp(timestamp);
-        cdrRegister.setDuration(duration);
-
-        return cdrRegister;
     }
 }
