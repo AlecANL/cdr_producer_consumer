@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Connection;
 import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -27,60 +28,62 @@ public class AppController {
     AtomicLong sequence = new AtomicLong(0);
     CountDownLatch doneProducers = new CountDownLatch(N_PRODUCERS);
 
-    private ConcurrentHashMap<String, Instant> producerTime = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, AtomicLong> counterProducer = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, AtomicLong> counterConsumer = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, AtomicLong> consumerTime = new ConcurrentHashMap<>();
+//    private ConcurrentHashMap<String, Instant> producerTime = new ConcurrentHashMap<>();
+//    private ConcurrentHashMap<String, AtomicLong> counterProducer = new ConcurrentHashMap<>();
+//    private ConcurrentHashMap<String, AtomicLong> counterConsumer = new ConcurrentHashMap<>();
+//    private ConcurrentHashMap<String, AtomicLong> consumerTime = new ConcurrentHashMap<>();
+//
+//
+//    private ObservableList<TableDetail> producerDetail = FXCollections.observableArrayList();
+//    private ObservableList<TableDetail> consumerDetail = FXCollections.observableArrayList();
+
+//    @FXML
+//    private TableView<TableDetail> producerView;
+//    @FXML
+//    private TableColumn<TableDetail, String> colProdName;
+//    @FXML
+//    private TableColumn<TableDetail, String> colProdStartTime;
+//    @FXML
+//    private TableColumn<TableDetail, Number> colProdRecords;
+//
+//    @FXML
+//    private TableView<TableDetail> consumerView;
+//    @FXML
+//    private TableColumn<TableDetail, String> colConsName;
+//    @FXML
+//    private TableColumn<TableDetail, String> colConsStartTime;
+//    @FXML
+//    private TableColumn<TableDetail, Number> colConsRecords;
+//    @FXML
+//    private TableColumn<TableDetail, Number> colConsMinutes;
+
+//    @FXML
+//    public void initialize() {
+//        colProdName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+//        colProdStartTime.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+//        colProdRecords.setCellValueFactory(cellData -> cellData.getValue().recordsProperty());
+//
+//        colConsName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+//        colConsStartTime.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+//        colConsRecords.setCellValueFactory(cellData -> cellData.getValue().recordsProperty());
+//        colConsMinutes.setCellValueFactory(cellData -> cellData.getValue().minutesProperty());
+//
+//        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.updateTableView()));
+//    }
+//
+//    private void updateTableView() {
+//
+//    }
+//
+//    private void createProducerTableView() {
+//
+//    }
+//
+//    private void createConsumerTableView() {
+//
+//    }
 
 
-    private ObservableList<TableDetail> producerDetail = FXCollections.observableArrayList();
-    private ObservableList<TableDetail> consumerDetail = FXCollections.observableArrayList();
-
-    @FXML
-    private TableView<TableDetail> producerView;
-    @FXML
-    private TableColumn<TableDetail, String> colProdName;
-    @FXML
-    private TableColumn<TableDetail, String> colProdStartTime;
-    @FXML
-    private TableColumn<TableDetail, Number> colProdRecords;
-
-    @FXML
-    private TableView<TableDetail> consumerView;
-    @FXML
-    private TableColumn<TableDetail, String> colConsName;
-    @FXML
-    private TableColumn<TableDetail, String> colConsStartTime;
-    @FXML
-    private TableColumn<TableDetail, Number> colConsRecords;
-    @FXML
-    private TableColumn<TableDetail, Number> colConsMinutes;
-
-    @FXML
-    public void initialize() {
-        colProdName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        colProdStartTime.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
-        colProdRecords.setCellValueFactory(cellData -> cellData.getValue().recordsProperty());
-
-        colConsName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        colConsStartTime.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
-        colConsRecords.setCellValueFactory(cellData -> cellData.getValue().recordsProperty());
-        colConsMinutes.setCellValueFactory(cellData -> cellData.getValue().minutesProperty());
-
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.updateTableView()));
-    }
-
-    private void updateTableView() {
-
-    }
-
-    private void createProducerTableView() {
-
-    }
-
-    private void createConsumerTableView() {
-
-    }
 
 
 
@@ -96,6 +99,12 @@ public class AppController {
         if (selectedFile != null) {
             System.out.println("Archivo cargado: " + selectedFile.getAbsolutePath());
             this.readFile(selectedFile);
+        }
+
+        try (Connection conn = Database.getConnection()) {
+            System.out.println("✅ Conexión a MySQL exitosa!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

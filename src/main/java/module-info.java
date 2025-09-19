@@ -4,6 +4,8 @@ module org.example.projectcdr {
 
     requires org.kordamp.bootstrapfx.core;
     requires javafx.graphics;
+    requires java.sql;
+
 
     opens org.example.projectcdr to javafx.fxml;
     exports org.example.projectcdr;
