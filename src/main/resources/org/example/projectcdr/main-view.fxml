@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcdr.AppController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="587.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcdr.AppController">
    <children>
        <Button layoutX="44.0" layoutY="28.0" onAction="#handleOpenFile" text="Abrir archivo" />
        <Label layoutX="44.0" layoutY="70.0" text="Productores" />
@@ -24,5 +24,10 @@
                <TableColumn fx:id="colConsMinutos" text="Minutos" />
            </columns>
        </TableView>
+      <TextField id="txtSearch" fx:id="txtSearch" layoutX="44.0" layoutY="387.0" prefHeight="37.0" prefWidth="500.0" />
+      <Button id="btnSearch" layoutX="436.0" layoutY="437.0" mnemonicParsing="false" onAction="#handleSearchRegister" prefHeight="37.0" prefWidth="108.0" text="Buscar" />
+      <Label id="labelResults" fx:id="lblSearch" layoutX="48.0" layoutY="504.0" prefHeight="71.0" prefWidth="492.0" style="-fx-border-color: red;" />
+      <Label layoutX="46.0" layoutY="369.0" text="Buscar registro" />
+      <Label layoutX="48.0" layoutY="485.0" text="Resultados" />
    </children>
 </Pane>

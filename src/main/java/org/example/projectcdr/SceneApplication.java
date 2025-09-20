@@ -13,8 +13,8 @@ public class SceneApplication extends Application {
     @Override
     public void start(Stage state) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SceneApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        state.setTitle("Hello!");
+        Scene scene = new Scene(fxmlLoader.load(), 580, 600);
+        state.setTitle("CDR");
         state.setScene(scene);
         state.show();
     }

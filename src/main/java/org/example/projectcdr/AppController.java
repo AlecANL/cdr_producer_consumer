@@ -5,15 +5,19 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
-
+import javafx.scene.control.TextField;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -84,6 +88,44 @@ public class AppController {
 //    }
 
 
+    @FXML
+    protected TextField txtSearch;
+
+    @FXML
+    protected Label lblSearch;
+
+    @FXML
+    protected void handleSearchRegister() {
+        String search = txtSearch.getText();
+
+        String sql = "SELECT " +
+                " account_number, " +
+                " SUM(duration_minutes) AS total_minutes, " +
+                " SUM(duration_minutes * tariff) AS total_cost " +
+                "FROM cdr " +
+                "WHERE account_number = ? " +
+                "GROUP BY account_number";
+
+
+        try(Connection connection = Database.getConnection()) {
+            PreparedStatement query = connection.prepareStatement(sql);
+            query.setString(1, search);
+
+            try (ResultSet resultSet = query.executeQuery()) {
+                while (resultSet.next()) {
+                    String account = resultSet.getString("account_number");
+                    int totalMinutes = resultSet.getInt("total_minutes");
+                    double totalCost = resultSet.getDouble("total_cost");
+
+                    this.lblSearch.setText("La cuenta: " + account + " Hablo un total de " + totalMinutes + " Minutos" + " con un costo de " + "Q." + totalCost);
+                    System.out.printf("Account: %s, Total Minutes: %d, Total Cost: %.2f%n", account, totalMinutes, totalCost);
+                    this.txtSearch.setText("");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
