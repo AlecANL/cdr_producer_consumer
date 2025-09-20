@@ -100,12 +100,6 @@ public class AppController {
             System.out.println("Archivo cargado: " + selectedFile.getAbsolutePath());
             this.readFile(selectedFile);
         }
-
-        try (Connection conn = Database.getConnection()) {
-            System.out.println("✅ Conexión a MySQL exitosa!");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void readFile(File file) throws IOException {
